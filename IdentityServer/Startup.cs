@@ -23,8 +23,7 @@ namespace IdentityServer
                 .AddInMemoryIdentityResources(InMemoryConfig.GetIdentityResources())
                 .AddTestUsers(InMemoryConfig.GetUsers())
                 .AddInMemoryClients(InMemoryConfig.GetClients())
-                .AddDeveloperSigningCredential(); ;
-            services.AddRazorPages();
+                .AddDeveloperSigningCredential();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,21 +33,8 @@ namespace IdentityServer
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
-
+            
             app.UseIdentityServer();
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-            });
         }
     }
 }
