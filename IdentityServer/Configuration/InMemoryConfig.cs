@@ -16,7 +16,7 @@ namespace IdentityServer.Configuration
             };
 
         public static List<TestUser> GetUsers() =>
-            new List<TestUser>
+            new()
             {
                 new TestUser
                 {
@@ -25,8 +25,8 @@ namespace IdentityServer.Configuration
                     Password = "MickPassword",
                     Claims = new List<Claim>
                     {
-                        new Claim("given_name", "Mick"),
-                        new Claim("family_name", "Mining")
+                        new("given_name", "Mick"),
+                        new("family_name", "Mining")
                     }
                 },
                 new TestUser
@@ -36,8 +36,8 @@ namespace IdentityServer.Configuration
                     Password = "JanePassword",
                     Claims = new List<Claim>
                     {
-                        new Claim("given_name", "Jane"),
-                        new Claim("family_name", "Downing")
+                        new("given_name", "Jane"),
+                        new("family_name", "Downing")
                     }
                 }
             };
@@ -45,7 +45,7 @@ namespace IdentityServer.Configuration
         public static IEnumerable<Client> GetClients() =>
             new List<Client>
             {
-                new Client
+                new()
                 {
                     ClientId = "company-employee",
                     ClientSecrets = new [] { new Secret("codemazesecret".Sha512()) },
