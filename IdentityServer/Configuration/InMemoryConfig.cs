@@ -17,15 +17,15 @@ namespace IdentityServer.Configuration
         public static IEnumerable<ApiScope> GetApiScopes() =>
             new List<ApiScope>
             {
-                new("companyApi", "CompanyEmployee API")
+                new("sampleApi", "Sample API")
             };
 
         public static IEnumerable<ApiResource> GetApiResources() =>
             new List<ApiResource>
             {
-                new("companyApi", "CompanyEmployee API")
+                new("sampleApi", "Sample API")
                 {
-                    Scopes = { "companyApi" }
+                    Scopes = { "sampleApi" }
                 }
             };
 
@@ -64,7 +64,7 @@ namespace IdentityServer.Configuration
                     ClientId = "company-employee",
                     ClientSecrets = new [] { new Secret("codemazesecret".Sha512()) },
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "companyApi" }
+                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, "sampleApi" }
                 }
             };
     }
