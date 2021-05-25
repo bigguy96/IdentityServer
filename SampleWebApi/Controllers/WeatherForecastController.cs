@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace SampleWebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Produces("application/json")]
     public class WeatherForecastController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace SampleWebApi.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
