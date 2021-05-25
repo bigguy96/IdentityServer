@@ -1,9 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SampleWeb.Models;
 using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SampleWeb.Services;
 
 namespace SampleWeb.Controllers
@@ -30,8 +38,29 @@ namespace SampleWeb.Controllers
             return View(weatherForecastViewModel);
         }
 
-        public IActionResult Privacy()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PrivacyAsync()
         {
+            var client = new HttpClient();
+            var metaDataResponse = await client.GetDiscoveryDocumentAsync("https://localhost:5005");
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            var response = await client.GetUserInfoAsync(new UserInfoRequest
+            {
+                Address = metaDataResponse.UserInfoEndpoint,
+                Token = accessToken
+            });
+
+            if (response.IsError)
+            {
+                throw new Exception("Problem while fetching data from the UserInfo endpoint", response.Exception);
+            }
+
+            var addressClaim = response.Claims.FirstOrDefault(c => c.Type.Equals("address"));
+            if (addressClaim != null)
+            {
+                User.AddIdentity(new ClaimsIdentity(new List<Claim> { new(addressClaim.Type, addressClaim.Value) }));
+            }
+
             return View();
         }
 
@@ -39,6 +68,11 @@ namespace SampleWeb.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Create()
+        {
+            return RedirectToAction("Index");
         }
     }
 }

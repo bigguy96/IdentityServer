@@ -1,11 +1,14 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using SampleWeb.Services;
 
 namespace SampleWeb
@@ -15,6 +18,7 @@ namespace SampleWeb
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public IConfiguration Configuration { get; }
@@ -34,16 +38,26 @@ namespace SampleWeb
             {
                 opt.DefaultScheme = "Cookies";
                 opt.DefaultChallengeScheme = "oidc";
-            }).AddCookie("Cookies")
-              .AddOpenIdConnect("oidc", opt =>
+            })
+             .AddCookie("Cookies")
+             .AddOpenIdConnect("oidc", opt =>
               {
-                opt.SignInScheme = "Cookies";
-                opt.Authority = "https://localhost:5005";
-                opt.ClientId = "mvc-client";
-                opt.ResponseType = "code id_token";
-                opt.SaveTokens = true;
-                opt.ClientSecret = "MVCSecret";
-                opt.GetClaimsFromUserInfoEndpoint = true;
+                  opt.SignInScheme = "Cookies";
+                  opt.Authority = "https://localhost:5005";
+                  opt.ClientId = "mvc-client";
+                  opt.ResponseType = "code id_token";
+                  opt.SaveTokens = true;
+                  opt.ClientSecret = "MVCSecret";
+                  opt.GetClaimsFromUserInfoEndpoint = true;
+                  opt.ClaimActions.DeleteClaim("sid");
+                  opt.ClaimActions.DeleteClaim("idp");
+                  opt.Scope.Add("address");
+                  opt.Scope.Add("roles");
+                  opt.ClaimActions.MapUniqueJsonKey("role", "role");
+                  opt.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      RoleClaimType = "role"
+                  };
               });
             services.AddControllersWithViews();
         }

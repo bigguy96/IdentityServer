@@ -5,26 +5,40 @@
 
 <h1>Home Page</h1>
 
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
 <table class="table">
     <thead>
-    <tr>
-        <th>Date</th>
-        <th>Temperature (Celsius)</th>
-        <th>Temperature (Fahrenheit)</th>
-        <th>Summary</th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>Date</th>
+            <th>Temperature (Celsius)</th>
+            <th>Temperature (Fahrenheit)</th>
+            <th>Summary</th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var m in Model)
-    {
-        <tr>
-            <td>@m.Date</td>
-            <td>@m.TemperatureC</td>
-            <td>@m.TemperatureF</td>
-            <td>@m.Summary</td>
-            <td><a href="#">Edit</a> | <a href="#">Details</a> | <a href="#">Delete</a></td>
-        </tr>
-    }
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>@m.Date</td>
+                <td>@m.TemperatureC</td>
+                <td>@m.TemperatureF</td>
+                <td>@m.Summary</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td><a href="#">Edit</a> | <a href="#">Details</a> | <a href="#">Delete</a></td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
+        }
     </tbody>
 </table>

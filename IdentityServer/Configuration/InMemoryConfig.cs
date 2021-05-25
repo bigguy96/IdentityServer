@@ -12,7 +12,9 @@ namespace IdentityServer.Configuration
             new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Address(),
+                new("roles", "User role(s)", new List<string> { "role" })
             };
         public static IEnumerable<ApiScope> GetApiScopes() =>
             new List<ApiScope>
@@ -40,7 +42,9 @@ namespace IdentityServer.Configuration
                     Claims = new List<Claim>
                     {
                         new("given_name", "Mick"),
-                        new("family_name", "Mining")
+                        new("family_name", "Mining"),
+                        new("address", "Sunny Street 4"),
+                        new("role", "Admin")
                     }
                 },
                 new TestUser
@@ -51,7 +55,9 @@ namespace IdentityServer.Configuration
                     Claims = new List<Claim>
                     {
                         new("given_name", "Jane"),
-                        new("family_name", "Downing")
+                        new("family_name", "Downing"),
+                        new("address", "Long Avenue 289"),
+                        new("role", "Visitor")
                     }
                 }
             };
@@ -73,9 +79,16 @@ namespace IdentityServer.Configuration
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     RedirectUris = new List<string>{ "https://localhost:5010/signin-oidc" },
                     RequirePkce = false,
-                    AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address,
+                        "roles"
+                    },
                     ClientSecrets = { new Secret("MVCSecret".Sha512()) },
-                    PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }
+                    PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" },
+                    RequireConsent = true
                 }
             };
     }
