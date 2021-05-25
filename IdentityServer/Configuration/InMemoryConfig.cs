@@ -74,7 +74,8 @@ namespace IdentityServer.Configuration
                     RedirectUris = new List<string>{ "https://localhost:5010/signin-oidc" },
                     RequirePkce = false,
                     AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile },
-                    ClientSecrets = { new Secret("MVCSecret".Sha512()) }
+                    ClientSecrets = { new Secret("MVCSecret".Sha512()) },
+                    PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" }
                 }
             };
     }

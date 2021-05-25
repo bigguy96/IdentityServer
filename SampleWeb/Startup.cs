@@ -43,7 +43,8 @@ namespace SampleWeb
                 opt.ResponseType = "code id_token";
                 opt.SaveTokens = true;
                 opt.ClientSecret = "MVCSecret";
-                });
+                opt.GetClaimsFromUserInfoEndpoint = true;
+              });
             services.AddControllersWithViews();
         }
 
