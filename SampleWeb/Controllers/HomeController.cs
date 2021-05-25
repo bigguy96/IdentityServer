@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SampleWeb.Models;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using SampleWeb.Services;
 
 namespace SampleWeb.Controllers
@@ -18,6 +19,8 @@ namespace SampleWeb.Controllers
             _logger = logger;
         }
 
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var weatherForecastViewModel = await _sampleClient.GetForecastAsync();

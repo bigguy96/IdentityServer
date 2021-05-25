@@ -30,7 +30,21 @@ namespace SampleWeb
                 c.DefaultRequestHeaders.Accept.Clear();
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
-            services.AddControllersWithViews();//https://localhost:44376/WeatherForecast
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultScheme = "Cookies";
+                opt.DefaultChallengeScheme = "oidc";
+            }).AddCookie("Cookies")
+              .AddOpenIdConnect("oidc", opt =>
+              {
+                opt.SignInScheme = "Cookies";
+                opt.Authority = "https://localhost:5005";
+                opt.ClientId = "mvc-client";
+                opt.ResponseType = "code id_token";
+                opt.SaveTokens = true;
+                opt.ClientSecret = "MVCSecret";
+                });
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +62,7 @@ namespace SampleWeb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
