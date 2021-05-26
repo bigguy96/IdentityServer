@@ -58,6 +58,7 @@ namespace SampleWeb
                   {
                       RoleClaimType = "role"
                   };
+                  opt.Scope.Add("sampleApi");
               });
             services.AddControllersWithViews();
         }

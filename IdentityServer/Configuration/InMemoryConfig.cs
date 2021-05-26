@@ -84,7 +84,8 @@ namespace IdentityServer.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
-                        "roles"
+                        "roles",
+                        "sampleApi"
                     },
                     ClientSecrets = { new Secret("MVCSecret".Sha512()) },
                     PostLogoutRedirectUris = new List<string> { "https://localhost:5010/signout-callback-oidc" },

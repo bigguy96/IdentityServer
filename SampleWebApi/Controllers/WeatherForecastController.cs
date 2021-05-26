@@ -24,7 +24,7 @@ namespace SampleWebApi.Controllers
             _logger = logger;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
